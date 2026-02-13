@@ -1,0 +1,29 @@
+{
+  "name": "@1001-digital/ponder-ens",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "drizzle-orm": ">=0.38.0",
+    "hono": ">=4.0.0",
+    "viem": ">=2.0.0"
+  },
+  "devDependencies": {
+    "drizzle-orm": "^0.38.0",
+    "hono": "^4.5.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.2.0",
+    "viem": "^2.21.0"
+  }
+}
