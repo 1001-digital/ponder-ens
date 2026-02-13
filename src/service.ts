@@ -10,12 +10,6 @@ export function createEnsService(config: EnsPluginConfig) {
   const { client, db } = config;
   const cacheTtl = config.cacheTtl ?? DEFAULT_CACHE_TTL;
 
-  function getWriteDb() {
-    return typeof config.writeDb === "function"
-      ? config.writeDb()
-      : config.writeDb;
-  }
-
   function isFresh(timestamp: number | null): boolean {
     if (!timestamp) return false;
     return Date.now() - timestamp * 1000 < cacheTtl;
@@ -182,11 +176,9 @@ export function createEnsService(config: EnsPluginConfig) {
       updatedAt: Math.floor(Date.now() / 1000),
     };
 
-    const writeDb = getWriteDb();
-
     // Clear ENS from any other address (handles ENS transfers)
     if (ens) {
-      await writeDb
+      await db
         .update(ensProfile)
         .set({ ens: null })
         .where(
@@ -197,7 +189,7 @@ export function createEnsService(config: EnsPluginConfig) {
         );
     }
 
-    await writeDb
+    await db
       .insert(ensProfile)
       .values({
         address: normalizedAddress,

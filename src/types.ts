@@ -32,10 +32,8 @@ export type EnsPluginConfig = {
     getEnsAvatar: (args: { name: string }) => Promise<string | null>;
     getEnsText: (args: { name: string; key: string }) => Promise<string | null>;
   };
-  /** Drizzle DB instance for reading profiles (e.g. `db` from ponder:api). */
+  /** Drizzle DB instance for ENS profile operations. Use createOffchainDb() or provide your own. */
   db: any;
-  /** Drizzle DB instance for writing profiles (offchain schema). Accepts an instance or a factory function. */
-  writeDb: (() => any) | any;
   /** Cache TTL in milliseconds. Defaults to 30 days. */
   cacheTtl?: number;
 };
