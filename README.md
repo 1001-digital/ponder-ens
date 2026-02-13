@@ -4,6 +4,14 @@ Reusable ENS profile resolution and caching for [Ponder](https://ponder.sh) inde
 
 Works with both **PostgreSQL** and **PGlite** (Ponder's default embedded database) — no Postgres required for development.
 
+## Why offchain?
+
+Ponder rebuilds its onchain tables from scratch on every reindex. If you were to resolve ENS names inside your event handlers, every restart would re-fetch every profile from the ENS registry — hammering your RPC endpoint and slowing down reindexing dramatically.
+
+This package sidesteps that entirely by storing ENS profiles in a **separate offchain table** that persists across reindexes. Profiles are resolved lazily on first request and cached with a 30-day TTL. No ENS calls happen during indexing.
+
+Your frontend can query the `/profiles/:id` endpoint to resolve ENS names for addresses (or addresses for ENS names). Responses are served from cache when fresh, so many concurrent requests for the same profile result in a single RPC lookup — not one per client.
+
 ## Install
 
 ```bash
