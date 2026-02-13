@@ -10,7 +10,7 @@ Ponder rebuilds its onchain tables from scratch on every reindex. If you were to
 
 This package sidesteps that entirely by storing ENS profiles in a **separate offchain table** that persists across reindexes. Profiles are resolved lazily on first request and cached with a 30-day TTL. No ENS calls happen during indexing.
 
-Your frontend can query the `/profiles/:id` endpoint to resolve ENS names for addresses (or addresses for ENS names). Responses are served from cache when fresh, so many concurrent requests for the same profile result in a single RPC lookup — not one per client.
+Your frontend can query the `/ens/:id` endpoint to resolve ENS names for addresses (or addresses for ENS names). Responses are served from cache when fresh, so many concurrent requests for the same profile result in a single RPC lookup — not one per client.
 
 ## Install
 
@@ -59,7 +59,7 @@ const { db: ensDb } = await createOffchainDb();
 const app = new Hono();
 
 app.route(
-  "/profiles",
+  "/ens",
   createEnsRoutes({
     client: publicClients["ethereum"],
     db: ensDb,
@@ -129,7 +129,7 @@ import { createEnsRoutes } from "@1001-digital/ponder-ens";
 import { getOffchainDb } from "./services/database";
 
 app.route(
-  "/profiles",
+  "/ens",
   createEnsRoutes({
     client: publicClients["ethereum"],
     db: getOffchainDb(),
